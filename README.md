@@ -35,3 +35,15 @@ http://localhost:8501
 ```
 
 Upload a tender document (PDF), click **Analyze**, and review the extracted structured information.
+
+## Quality Assurance
+
+This project includes automated tests using `pytest`.
+
+Current test coverage includes:
+
+- PDF reader error handling
+- AI extraction in demo mode
+- Validation of structured tender analysis output
+
+GitHub Actions is configured to run tests automatically on push and pull requests.
