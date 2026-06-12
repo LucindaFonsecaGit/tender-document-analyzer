@@ -1,0 +1,81 @@
+{
+  "contracting_authority": "ABC Infrastructure Ltd.",
+  "tender_title": "Procurement of an AI-Based Budget Estimation and Document Automation Platform",
+  "submission_deadline": "10 July 2026",
+  "project_objectives": [
+    "Reading tender documentation (PDF, Word, Excel)",
+    "Extracting technical requirements",
+    "Suggesting budget estimates",
+    "Identifying missing information",
+    "Generating draft procurement documents",
+    "Integrating with Microsoft 365",
+    "Providing audit logs",
+    "Supporting human review before publication"
+  ],
+  "scope_of_work": [
+    "Phase 1 – Discovery: Requirements gathering, stakeholder workshops, current process analysis; Deliverables: Business Requirements Document (BRD), Functional Specification, Solution Architecture",
+    "Phase 2 – AI Development: Develop AI components for OCR processing, document classification, information extraction, cost estimation suggestions, risk identification, natural language search",
+    "Phase 3 – System Integration: Integrate with Microsoft SharePoint, Microsoft Teams, Outlook, ERP system, SQL Server database",
+    "Phase 4 – Testing: Unit, integration, system, performance, security, and user acceptance testing; produce test plans, test cases, test results, defect reports, traceability matrix",
+    "Phase 5 – Deployment: Production deployment, user training, documentation, 30‑day hyper‑care support"
+  ],
+  "deliverables": [
+    "Source Code",
+    "Technical Documentation",
+    "API Documentation",
+    "Deployment Guide",
+    "User Manual",
+    "Administrator Manual",
+    "Training Materials",
+    "Test Evidence"
+  ],
+  "evaluation_criteria": [
+    {
+      "criterion": "Technical Solution",
+      "weight_percent": 40
+    },
+    {
+      "criterion": "Relevant Experience",
+      "weight_percent": 20
+    },
+    {
+      "criterion": "Project Methodology",
+      "weight_percent": 15
+    },
+    {
+      "criterion": "Price",
+      "weight_percent": 20
+    },
+    {
+      "criterion": "Sustainability",
+      "weight_percent": 5
+    }
+  ],
+  "technical_requirements": {
+    "functional": [
+      "Support English and Portuguese languages",
+      "Process PDF files up to 500 pages",
+      "Accurately extract tables",
+      "Detect duplicate requirements",
+      "Generate editable Word documents",
+      "Export reports to Excel",
+      "Provide confidence scores for AI recommendations"
+    ],
+    "non_functional": [
+      "Availability 99.9%",
+      "Authentication via Microsoft Entra ID",
+      "Encryption AES‑256",
+      "API response time < 2 seconds",
+      "Scalability to 500 concurrent users",
+      "Audit logging required"
+    ]
+  },
+  "risks_or_missing_information": [
+    "No budget or price ceiling disclosed in the tender document",
+    "Detailed data security and privacy requirements beyond encryption and authentication are not specified",
+    "The exact ERP system to be integrated is not identified",
+    "No explicit service level agreement (SLA) metrics for support beyond the 30‑day hyper‑care period",
+    "Weight percentages in the evaluation criteria sum to 100%, but the document lists 5 criteria; verification may be needed"
+  ],
+  "summary": "ABC Infrastructure Ltd. seeks a supplier to design, develop, integrate, test, and deploy an AI‑based platform that automates budget estimation and document generation for construction tenders. The solution must read various document formats, extract technical data, suggest cost estimates, flag missing information, and integrate with Microsoft 365 and the company’s ERP. The project is divided into five phases covering discovery, AI development, system integration, testing, and deployment, with a submission deadline of 10 July 2026 and a go‑live target of February 2027. Evaluation will be based on technical merit, experience, methodology, price, and sustainability."
+}
