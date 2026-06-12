@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 
 from app.ai_extractor import analyze_tender_text
 from app.pdf_reader import extract_text_from_pdf
@@ -7,6 +8,18 @@ from app.utils import save_json
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SAMPLE_PDF = PROJECT_ROOT / "sample_documents" / "sample_tender.pdf"
 OUTPUT_PATH = PROJECT_ROOT / "output" / "tender_analysis.json"
+
+parser = argparse.ArgumentParser(
+    description="Analyze a public tender document using AI."
+)
+
+parser.add_argument(
+    "--demo",
+    action="store_true",
+    help="Run without calling the AI model."
+)
+
+args = parser.parse_args()
 
 
 def main() -> None:
@@ -23,9 +36,13 @@ def main() -> None:
             return
 
         print("PDF text extracted successfully.")
-        print("Analyzing tender document with AI...")
+        print("Analyzing tender document...")
 
-        analysis = analyze_tender_text(text)
+        analysis = analyze_tender_text(
+            text,
+            demo_mode=args.demo
+        )
+
         result = analysis.model_dump()
 
         print("\nTender Analysis Result:")
