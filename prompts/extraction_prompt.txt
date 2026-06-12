@@ -1,0 +1,25 @@
+Return ONLY valid JSON with this exact structure:
+
+{{
+  "contracting_authority": "string",
+  "tender_title": "string",
+  "submission_deadline": "string",
+  "project_objectives": ["string"],
+  "scope_of_work": ["string"],
+  "deliverables": ["string"],
+  "evaluation_criteria": [
+    {{
+      "criterion": "string",
+      "weight_percent": 0
+    }}
+  ],
+  "technical_requirements": {{
+    "functional": ["string"],
+    "non_functional": ["string"]
+  }},
+  "risks_or_missing_information": ["string"],
+  "summary": "string"
+}}
+
+Tender document text:
+{document_text}
