@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 class Settings:
     project_root: Path = PROJECT_ROOT
-    prompt_path: Path = PROJECT_ROOT / "prompts" / "extraction_prompt.txt"
+    prompt_path: Path = PROJECT_ROOT / "prompts" / "v1" / "extraction_prompt.txt"
     sample_pdf_path: Path = PROJECT_ROOT / "sample_documents" / "sample_tender.pdf"
     output_path: Path = PROJECT_ROOT / "output" / "tender_analysis.json"
     report_path: Path = PROJECT_ROOT / "output" / "report.md"
