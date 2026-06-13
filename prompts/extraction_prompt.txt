@@ -1,25 +1,147 @@
-Return ONLY valid JSON with this exact structure:
+You are an AI assistant specialised in analysing public procurement and tender documents.
 
-{{
-  "contracting_authority": "string",
-  "tender_title": "string",
-  "submission_deadline": "string",
-  "project_objectives": ["string"],
-  "scope_of_work": ["string"],
-  "deliverables": ["string"],
+Your task is to extract structured information from the tender document provided below.
+
+IMPORTANT RULES
+
+1. Return ONLY valid JSON.
+2. Do NOT include markdown.
+3. Do NOT wrap the JSON in ``` blocks.
+4. Do NOT invent information.
+5. If information is not explicitly stated in the document, return:
+   {
+     "value": "Not specified",
+     "evidence": "No supporting evidence found in the document."
+   }
+6. Every "Evidence" object MUST contain:
+   - value
+   - evidence
+7. Lists should be empty if the information cannot be found.
+8. Preserve wording from the tender whenever possible.
+9. Evidence should be a short quotation or concise excerpt from the document.
+10. The JSON MUST exactly match the schema below.
+
+Return JSON using this structure:
+
+{
+  "contracting_authority": {
+    "value": "",
+    "evidence": ""
+  },
+
+  "tender_title": {
+    "value": "",
+    "evidence": ""
+  },
+
+  "submission_deadline": {
+    "value": "",
+    "evidence": ""
+  },
+
+  "estimated_budget": {
+    "value": "",
+    "evidence": ""
+  },
+
+  "project_objectives": [],
+
+  "scope_of_work": [],
+
+  "deliverables": [],
+
   "evaluation_criteria": [
-    {{
-      "criterion": "string",
+    {
+      "criterion": "",
       "weight_percent": 0
-    }}
+    }
   ],
-  "technical_requirements": {{
-    "functional": ["string"],
-    "non_functional": ["string"]
-  }},
-  "risks_or_missing_information": ["string"],
-  "summary": "string"
-}}
 
-Tender document text:
+  "technical_requirements": {
+    "functional": [],
+    "non_functional": []
+  },
+
+  "risks_or_missing_information": [],
+
+  "summary": ""
+}
+
+Special extraction rules
+
+Contracting Authority
+- Extract the organisation issuing the tender.
+
+Tender Title
+- Extract the official title of the procurement.
+
+Submission Deadline
+- Extract the proposal submission deadline.
+
+Estimated Budget
+
+Look for values labelled as:
+
+- Estimated Budget
+- Estimated Contract Value
+- Contract Value
+- Budget
+- Maximum Budget
+- Maximum Available Budget
+- Ceiling Price
+- Price Ceiling
+- Preço Base
+- Valor Estimado
+- Valor do Contrato
+- Valor Máximo
+
+If multiple values exist, return the main contract value.
+
+If no value exists, return:
+
+{
+  "value": "Not specified",
+  "evidence": "No estimated budget was found in the document."
+}
+
+Project Objectives
+
+Extract every objective listed.
+
+Scope of Work
+
+Extract each phase and its responsibilities.
+
+Deliverables
+
+Extract every deliverable.
+
+Evaluation Criteria
+
+Return every criterion with its percentage.
+
+Technical Requirements
+
+Separate requirements into:
+
+- functional
+- non_functional
+
+Risks or Missing Information
+
+Identify ambiguities, inconsistencies, missing information, assumptions, missing technical details or contractual risks.
+
+Summary
+
+Write a concise summary (100–200 words) describing:
+
+- what is being procured
+- who is procuring it
+- major project phases
+- main technical requirements
+- evaluation approach
+- submission deadline
+
+Tender document:
+
 {document_text}

@@ -20,9 +20,30 @@ def load_prompt() -> str:
 
 def get_demo_analysis() -> TenderAnalysis:
     return TenderAnalysis(
-        contracting_authority="Municipality of Example City",
-        tender_title="Public Tender for Administrative Process Automation",
-        submission_deadline="2026-07-15",
+        contracting_authority={
+            "value": "Municipality of Example City",
+            "confidence": 0.95,
+            "page": 1,
+            "quote": "The contracting authority is the Municipality of Example City."
+        },
+        tender_title={
+            "value": "Public Tender for Administrative Process Automation",
+            "confidence": 0.92,
+            "page": 1,
+            "quote": "Public Tender for Administrative Process Automation."
+        },
+        submission_deadline={
+            "value": "2026-07-15",
+            "confidence": 0.90,
+            "page": 2,
+            "quote": "Proposals must be submitted by 2026-07-15."
+        },
+        estimated_budget={
+            "value": "€75,000",
+            "confidence": 0.88,
+            "page": 3,
+            "quote": "The estimated contract value is €75,000."
+        },
         project_objectives=[
             "Reading tender documentation (PDF, Word, Excel)",
             "Extracting technical requirements",
@@ -101,7 +122,7 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
     )
 
     prompt_template = load_prompt()
-    prompt = prompt_template.format(document_text=document_text[:12000])
+    prompt = prompt_template.replace("{document_text}", document_text[:12000])
 
     response = client.chat.completions.create(
         model=model,

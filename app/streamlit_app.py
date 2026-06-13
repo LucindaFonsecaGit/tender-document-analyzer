@@ -50,11 +50,12 @@ if uploaded_file is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.metric("Contracting Authority", analysis.contracting_authority or "Not found")
-            st.metric("Submission Deadline", analysis.submission_deadline or "Not found")
+            st.metric("Contracting Authority", analysis.contracting_authority.value or "Not found")
+            st.metric("Submission Deadline", analysis.submission_deadline.value or "Not found")
 
         with col2:
-            st.metric("Project Title", analysis.tender_title or "Not found")
+            st.metric("Project Title", analysis.tender_title.value or "Not found")
+            st.metric("Estimated Budget", analysis.estimated_budget.value or "Not found")
 
         st.divider()
 

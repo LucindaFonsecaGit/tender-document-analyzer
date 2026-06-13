@@ -9,20 +9,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SAMPLE_PDF = PROJECT_ROOT / "sample_documents" / "sample_tender.pdf"
 OUTPUT_PATH = PROJECT_ROOT / "output" / "tender_analysis.json"
 
-parser = argparse.ArgumentParser(
-    description="Analyze a public tender document using AI."
-)
 
-parser.add_argument(
-    "--demo",
-    action="store_true",
-    help="Run without calling the AI model."
-)
-
-args = parser.parse_args()
-
-
-def main() -> None:
+def main(demo_mode: bool = False) -> None:
     try:
         if not SAMPLE_PDF.exists():
             raise FileNotFoundError(f"File not found: {SAMPLE_PDF}")
@@ -38,11 +26,7 @@ def main() -> None:
         print("PDF text extracted successfully.")
         print("Analyzing tender document...")
 
-        analysis = analyze_tender_text(
-            text,
-            demo_mode=args.demo
-        )
-
+        analysis = analyze_tender_text(text, demo_mode=demo_mode)
         result = analysis.model_dump()
 
         print("\nTender Analysis Result:")
@@ -61,4 +45,14 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Analyze a public tender document using AI."
+    )
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Run without calling the AI model."
+    )
+
+    args = parser.parse_args()
+    main(demo_mode=args.demo)
