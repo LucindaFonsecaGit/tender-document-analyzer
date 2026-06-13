@@ -8,8 +8,12 @@ from app.ai_extractor import analyze_tender_text
 from app.pdf_reader import extract_text_from_pdf
 from app.utils import save_json
 
+from app.report_generator import generate_markdown_report
+from app.utils import save_json, save_markdown
+
 SAMPLE_PDF = settings.sample_pdf_path
 OUTPUT_PATH = settings.output_path
+REPORT_PATH = settings.report_path
 
 logger = get_logger(__name__)
 
@@ -36,6 +40,10 @@ def main(demo_mode: bool = False) -> None:
         logger.info(analysis.model_dump_json(indent=2))
 
         save_json(result, OUTPUT_PATH)
+
+        report = generate_markdown_report(analysis)
+        save_markdown(report, str(REPORT_PATH))
+        logger.info(f"Report saved to: {REPORT_PATH}")
 
         logger.info(f"\nAnalysis saved to: {OUTPUT_PATH}")
 

@@ -14,6 +14,7 @@ class Settings:
     prompt_path: Path = PROJECT_ROOT / "prompts" / "extraction_prompt.txt"
     sample_pdf_path: Path = PROJECT_ROOT / "sample_documents" / "sample_tender.pdf"
     output_path: Path = PROJECT_ROOT / "output" / "tender_analysis.json"
+    report_path: Path = PROJECT_ROOT / "output" / "report.md"
 
     llm_api_key: str | None = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
     llm_base_url: str | None = os.getenv("LLM_BASE_URL")
