@@ -75,7 +75,13 @@ Return JSON using this exact structure:
     "functional": [],
     "non_functional": []
   },
-  "risks_or_missing_information": [],
+  "risks_or_missing_information": [
+    {
+      "description": "",
+      "severity": "",
+      "recommendation": ""
+    }
+  ]
   "summary": ""
 }
 
@@ -137,6 +143,10 @@ Technical Requirements
 
 Risks or Missing Information
 - Identify ambiguities, inconsistencies, missing information, assumptions, missing technical details or contractual risks.
+For each risk, include:
+- description
+- severity: low, medium, or high
+- recommendation
 
 Summary
 - Write a concise summary of 100 to 200 words.

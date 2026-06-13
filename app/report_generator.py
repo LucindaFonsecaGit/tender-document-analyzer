@@ -43,7 +43,7 @@ def generate_markdown_report(analysis: TenderAnalysis) -> str:
 
 ## Risks or Missing Information
 
-{format_list(analysis.risks_or_missing_information)}
+{format_risks(analysis)}
 
 ## Human Review
 
@@ -67,4 +67,17 @@ def format_evaluation_criteria(analysis: TenderAnalysis) -> str:
     return "\n".join(
         f"- {item.criterion}: {item.weight_percent or 'N/A'}%"
         for item in analysis.evaluation_criteria
+    )
+
+def format_risks(analysis: TenderAnalysis) -> str:
+    if not analysis.risks_or_missing_information:
+        return "- Not identified"
+
+    return "\n".join(
+        (
+            f"- **Description:** {risk.description}\n"
+            f"  - **Severity:** {risk.severity}\n"
+            f"  - **Recommendation:** {risk.recommendation}"
+        )
+        for risk in analysis.risks_or_missing_information
     )

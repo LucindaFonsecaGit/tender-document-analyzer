@@ -97,7 +97,10 @@ if uploaded_file is not None:
         st.write(analysis.technical_requirements or "No technical requirements identified.")
 
         st.subheader("Risks or Missing Information")
-        st.write(analysis.risks_or_missing_information or "No risks identified.")
+        for risk in analysis.risks_or_missing_information:
+            st.markdown(f"**Description:** {risk.description}")
+            st.markdown(f"**Severity:** {risk.severity}")
+            st.markdown(f"**Recommendation:** {risk.recommendation}")
 
         st.subheader("Human Review")
 

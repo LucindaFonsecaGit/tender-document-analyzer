@@ -83,9 +83,16 @@ def get_demo_analysis() -> TenderAnalysis:
             ]
         },
         risks_or_missing_information=[
-            "Integration details are not fully specified",
-            "Data format requirements need clarification",
-            "Acceptance criteria should be confirmed",
+            {
+                "description": "Integration details are not fully specified",
+                "severity": "high",
+                "recommendation": "Request technical clarification before estimating implementation cost.",
+            },
+            {
+                "description": "Data format requirements need clarification",
+                "severity": "medium",
+                "recommendation": "Ask for sample files or integration documentation.",
+            },
         ],
         summary=(
             "This tender concerns the implementation of a digital solution "

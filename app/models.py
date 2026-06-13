@@ -29,6 +29,10 @@ class ReviewStatus(BaseModel):
     reviewer: str | None = None
     comments: str | None = None
 
+class RiskItem(BaseModel):
+    description: str
+    severity: str = "medium"
+    recommendation: str | None = None
 
 class TenderAnalysis(BaseModel):
     contracting_authority: Evidence
@@ -40,6 +44,6 @@ class TenderAnalysis(BaseModel):
     deliverables: list[str] = Field(default_factory=list)
     evaluation_criteria: list[EvaluationCriterion] = Field(default_factory=list)
     technical_requirements: TechnicalRequirements
-    risks_or_missing_information: list[str] = Field(default_factory=list)
+    risks_or_missing_information: list[RiskItem] = Field(default_factory=list)
     summary: str
     review_status: ReviewStatus = Field(default_factory=ReviewStatus)
