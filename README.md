@@ -1,3 +1,18 @@
+## Enterprise AI Concepts Demonstrated
+
+This project demonstrates several enterprise AI patterns:
+
+- Structured AI output
+- Confidence scores
+- Evidence tracking
+- Human-in-the-loop review
+- Demo mode
+- Centralized configuration
+- Logging
+- Automated testing
+- CI workflow
+- Business-friendly reporting
+
 # Usage
 
 ## Command-Line Interface
