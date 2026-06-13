@@ -50,12 +50,37 @@ if uploaded_file is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.metric("Contracting Authority", analysis.contracting_authority.value or "Not found")
-            st.metric("Submission Deadline", analysis.submission_deadline.value or "Not found")
+            st.metric(
+                "Contracting Authority",
+                analysis.contracting_authority.value or "Not found"
+            )
+            st.metric(
+                "Submission Deadline",
+                analysis.submission_deadline.value or "Not found"
+            )
 
         with col2:
-            st.metric("Project Title", analysis.tender_title.value or "Not found")
+            st.metric(
+                "Project Title",
+                analysis.tender_title.value or "Not found"
+            )
             st.metric("Estimated Budget", analysis.estimated_budget.value or "Not found")
+
+        st.subheader("Evidence")
+
+        evidence_items = [
+            ("Contracting Authority", analysis.contracting_authority),
+            ("Tender Title", analysis.tender_title),
+            ("Submission Deadline", analysis.submission_deadline),
+            ("Estimated Budget", analysis.estimated_budget),
+        ]
+
+        for label, field in evidence_items:
+            with st.expander(label):
+                st.write(f"**Value:** {field.value or 'Not found'}")
+                st.write(f"**Confidence:** {field.confidence}")
+                st.write(f"**Page:** {field.page or 'Not available'}")
+                st.write(f"**Quote:** {field.quote or 'Not available'}")
 
         st.divider()
 

@@ -4,7 +4,7 @@ from pypdf import PdfReader
 
 
 def extract_text_from_pdf(pdf_path: str | Path) -> str:
-    """Extract and return all text from a PDF file."""
+    """Extract text from a PDF file and preserve page markers for evidence tracking."""
 
     pdf_path = Path(pdf_path)
 
@@ -12,13 +12,10 @@ def extract_text_from_pdf(pdf_path: str | Path) -> str:
         raise FileNotFoundError(f"PDF not found: {pdf_path}")
 
     reader = PdfReader(pdf_path)
+    pages: list[str] = []
 
-    text = []
+    for page_number, page in enumerate(reader.pages, start=1):
+        page_text = page.extract_text() or ""
+        pages.append(f"===== PAGE {page_number} =====\n{page_text.strip()}")
 
-    for page in reader.pages:
-        page_text = page.extract_text()
-
-        if page_text:
-            text.append(page_text)
-
-    return "\n".join(text)
+    return "\n\n".join(pages)

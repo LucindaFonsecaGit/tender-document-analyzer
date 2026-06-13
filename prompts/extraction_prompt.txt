@@ -8,62 +8,74 @@ IMPORTANT RULES
 2. Do NOT include markdown.
 3. Do NOT wrap the JSON in ``` blocks.
 4. Do NOT invent information.
-5. If information is not explicitly stated in the document, return:
+5. Every Evidence object MUST contain exactly these fields:
+   - value
+   - confidence
+   - page
+   - quote
+6. Do NOT use an "evidence" field. Use "quote" instead.
+7. confidence must be a number between 0 and 1.
+8. page must be the page number where the quote appears.
+9. quote must be a short exact excerpt copied from the document.
+10. If a value is found, page and quote must not be null.
+11. If information is not explicitly stated in the document, return:
    {
      "value": "Not specified",
-     "evidence": "No supporting evidence found in the document."
+     "confidence": 0.0,
+     "page": null,
+     "quote": null
    }
-6. Every "Evidence" object MUST contain:
-   - value
-   - evidence
-7. Lists should be empty if the information cannot be found.
-8. Preserve wording from the tender whenever possible.
-9. Evidence should be a short quotation or concise excerpt from the document.
-10. The JSON MUST exactly match the schema below.
+12. Lists should be empty if the information cannot be found.
+13. Preserve wording from the tender whenever possible.
+14. The JSON MUST exactly match the schema below.
 
-Return JSON using this structure:
+The document contains page markers in the form:
+
+===== PAGE X =====
+
+Use these page markers to identify the page number for each extracted Evidence object.
+
+Return JSON using this exact structure:
 
 {
   "contracting_authority": {
     "value": "",
-    "evidence": ""
+    "confidence": 0.0,
+    "page": null,
+    "quote": ""
   },
-
   "tender_title": {
     "value": "",
-    "evidence": ""
+    "confidence": 0.0,
+    "page": null,
+    "quote": ""
   },
-
   "submission_deadline": {
     "value": "",
-    "evidence": ""
+    "confidence": 0.0,
+    "page": null,
+    "quote": ""
   },
-
   "estimated_budget": {
     "value": "",
-    "evidence": ""
+    "confidence": 0.0,
+    "page": null,
+    "quote": ""
   },
-
   "project_objectives": [],
-
   "scope_of_work": [],
-
   "deliverables": [],
-
   "evaluation_criteria": [
     {
       "criterion": "",
       "weight_percent": 0
     }
   ],
-
   "technical_requirements": {
     "functional": [],
     "non_functional": []
   },
-
   "risks_or_missing_information": [],
-
   "summary": ""
 }
 
@@ -71,12 +83,15 @@ Special extraction rules
 
 Contracting Authority
 - Extract the organisation issuing the tender.
+- Use a quote from the page where the organisation name appears.
 
 Tender Title
 - Extract the official title of the procurement.
+- Use a quote from the title section.
 
 Submission Deadline
 - Extract the proposal submission deadline.
+- Closing Date means submission deadline.
 
 Estimated Budget
 
@@ -96,51 +111,35 @@ Look for values labelled as:
 - Valor Máximo
 
 If multiple values exist, return the main contract value.
-
-If no value exists, return:
+If no explicit budget or contract value exists, return:
 
 {
   "value": "Not specified",
-  "evidence": "No estimated budget was found in the document."
+  "confidence": 0.0,
+  "page": null,
+  "quote": null
 }
 
 Project Objectives
-
-Extract every objective listed.
+- Extract every objective listed.
 
 Scope of Work
-
-Extract each phase and its responsibilities.
+- Extract each phase and its responsibilities.
 
 Deliverables
-
-Extract every deliverable.
+- Extract every deliverable.
 
 Evaluation Criteria
-
-Return every criterion with its percentage.
+- Return every criterion with its percentage.
 
 Technical Requirements
-
-Separate requirements into:
-
-- functional
-- non_functional
+- Separate requirements into functional and non_functional.
 
 Risks or Missing Information
-
-Identify ambiguities, inconsistencies, missing information, assumptions, missing technical details or contractual risks.
+- Identify ambiguities, inconsistencies, missing information, assumptions, missing technical details or contractual risks.
 
 Summary
-
-Write a concise summary (100–200 words) describing:
-
-- what is being procured
-- who is procuring it
-- major project phases
-- main technical requirements
-- evaluation approach
-- submission deadline
+- Write a concise summary of 100 to 200 words.
 
 Tender document:
 

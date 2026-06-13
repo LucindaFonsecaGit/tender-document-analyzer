@@ -107,6 +107,110 @@ def clean_json_response(content: str) -> str:
     return content
 
 
+def _split_pages(document_text: str) -> list[tuple[int, str]]:
+    pages: list[tuple[int, str]] = []
+    current_page: int | None = None
+    current_lines: list[str] = []
+
+    for line in document_text.splitlines():
+        stripped = line.strip()
+
+        if stripped.startswith("===== PAGE ") and stripped.endswith("====="):
+            if current_page is not None:
+                pages.append((current_page, "\n".join(current_lines).strip()))
+
+            number_text = stripped.replace("===== PAGE ", "").replace(" =====", "")
+            try:
+                current_page = int(number_text)
+            except ValueError:
+                current_page = None
+
+            current_lines = []
+        else:
+            current_lines.append(line)
+
+    if current_page is not None:
+        pages.append((current_page, "\n".join(current_lines).strip()))
+
+    return pages
+
+
+def _short_quote_around(page_text: str, search_value: str) -> str | None:
+    if not search_value:
+        return None
+
+    compact_text = " ".join(page_text.split())
+    compact_value = " ".join(search_value.split())
+
+    lower_text = compact_text.lower()
+    lower_value = compact_value.lower()
+
+    index = lower_text.find(lower_value)
+    if index == -1:
+        return None
+
+    start = max(0, index - 80)
+    end = min(len(compact_text), index + len(compact_value) + 80)
+    return compact_text[start:end].strip()
+
+
+def _find_evidence(document_text: str, value: str | None) -> tuple[int | None, str | None]:
+    if not value or value.lower() == "not specified":
+        return None, None
+
+    pages = _split_pages(document_text)
+
+    for page_number, page_text in pages:
+        quote = _short_quote_around(page_text, value)
+        if quote:
+            return page_number, quote
+
+    return None, None
+
+
+def _normalise_evidence_fields(data: dict, document_text: str) -> dict:
+    evidence_fields = [
+        "contracting_authority",
+        "tender_title",
+        "submission_deadline",
+        "estimated_budget",
+    ]
+
+    for field_name in evidence_fields:
+        field = data.get(field_name)
+
+        if not isinstance(field, dict):
+            data[field_name] = {
+                "value": field,
+                "confidence": 0.0,
+                "page": None,
+                "quote": None,
+            }
+            field = data[field_name]
+
+        # Backwards compatibility with older prompt versions that returned "evidence".
+        if not field.get("quote") and field.get("evidence"):
+            field["quote"] = field.get("evidence")
+
+        field.pop("evidence", None)
+
+        value = field.get("value")
+        page = field.get("page")
+        quote = field.get("quote")
+
+        # If the model found a value but did not provide page/quote, derive it from the page markers.
+        if value and str(value).lower() != "not specified" and (not page or not quote):
+            derived_page, derived_quote = _find_evidence(document_text, str(value))
+            field["page"] = page or derived_page
+            field["quote"] = quote or derived_quote
+
+        field.setdefault("confidence", 0.0)
+        field.setdefault("page", None)
+        field.setdefault("quote", None)
+
+    return data
+
+
 def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAnalysis:
     api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
     base_url = os.getenv("LLM_BASE_URL")
@@ -143,6 +247,8 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
     content = clean_json_response(content)
 
     data = json.loads(content)
+
+    data = _normalise_evidence_fields(data, document_text)
 
     print(json.dumps(data, indent=2, ensure_ascii=False))
 
