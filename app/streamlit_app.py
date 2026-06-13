@@ -99,6 +99,19 @@ if uploaded_file is not None:
         st.subheader("Risks or Missing Information")
         st.write(analysis.risks_or_missing_information or "No risks identified.")
 
+        st.subheader("Human Review")
+
+        reviewed = st.checkbox("Reviewed by human")
+        reviewer = st.text_input("Reviewer name")
+        comments = st.text_area("Review comments")
+
+        if reviewed:
+            analysis.review_status.reviewed = True
+            analysis.review_status.reviewer = reviewer or None
+            analysis.review_status.comments = comments or None
+
+            st.success("Review information added to the analysis.")
+
         st.download_button(
             label="Download JSON Result",
             data=analysis.model_dump_json(indent=2),
