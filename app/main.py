@@ -1,3 +1,4 @@
+from app.config import settings
 from pathlib import Path
 import argparse
 
@@ -5,9 +6,8 @@ from app.ai_extractor import analyze_tender_text
 from app.pdf_reader import extract_text_from_pdf
 from app.utils import save_json
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SAMPLE_PDF = PROJECT_ROOT / "sample_documents" / "sample_tender.pdf"
-OUTPUT_PATH = PROJECT_ROOT / "output" / "tender_analysis.json"
+SAMPLE_PDF = settings.sample_pdf_path
+OUTPUT_PATH = settings.output_path
 
 
 def main(demo_mode: bool = False) -> None:

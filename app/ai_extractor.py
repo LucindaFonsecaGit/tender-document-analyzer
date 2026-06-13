@@ -1,3 +1,4 @@
+from app.config import settings
 import json
 import os
 from pathlib import Path
@@ -10,12 +11,9 @@ from app.models import TenderAnalysis
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-PROMPT_PATH = BASE_DIR / "prompts" / "extraction_prompt.txt"
-
 
 def load_prompt() -> str:
-    return PROMPT_PATH.read_text(encoding="utf-8")
+    return settings.prompt_path.read_text(encoding="utf-8")
 
 
 def get_demo_analysis() -> TenderAnalysis:
@@ -212,9 +210,9 @@ def _normalise_evidence_fields(data: dict, document_text: str) -> dict:
 
 
 def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAnalysis:
-    api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
-    base_url = os.getenv("LLM_BASE_URL")
-    model = os.getenv("LLM_MODEL", "openai/gpt-oss-120b:free")
+    api_key = settings.llm_api_key
+    base_url = settings.llm_base_url
+    model = settings.llm_model
 
     if demo_mode or not api_key:
         print("Running in demo mode. No API key was used.")
@@ -226,7 +224,8 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
     )
 
     prompt_template = load_prompt()
-    prompt = prompt_template.replace("{document_text}", document_text[:12000])
+    document_excerpt = document_text[: settings.max_document_length]
+    prompt = prompt_template.replace("{document_text}", document_excerpt)
 
     response = client.chat.completions.create(
         model=model,
@@ -240,7 +239,7 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
                 "content": prompt,
             },
         ],
-        temperature=0,
+        temperature=settings.temperature,
     )
 
     content = response.choices[0].message.content
