@@ -1,3 +1,5 @@
+from app.logger import get_logger
+
 from app.config import settings
 from pathlib import Path
 import argparse
@@ -9,39 +11,40 @@ from app.utils import save_json
 SAMPLE_PDF = settings.sample_pdf_path
 OUTPUT_PATH = settings.output_path
 
+logger = get_logger(__name__)
 
 def main(demo_mode: bool = False) -> None:
     try:
         if not SAMPLE_PDF.exists():
             raise FileNotFoundError(f"File not found: {SAMPLE_PDF}")
 
-        print(f"Reading {SAMPLE_PDF.name}...")
+        logger.info(f"Reading {SAMPLE_PDF.name}...")
 
         text = extract_text_from_pdf(SAMPLE_PDF)
 
         if not text.strip():
-            print("No text could be extracted from the PDF.")
+            logger.info("No text could be extracted from the PDF.")
             return
 
-        print("PDF text extracted successfully.")
-        print("Analyzing tender document...")
+        logger.info("PDF text extracted successfully.")
+        logger.info("Analyzing tender document...")
 
         analysis = analyze_tender_text(text, demo_mode=demo_mode)
         result = analysis.model_dump()
 
-        print("\nTender Analysis Result:")
-        print(analysis.model_dump_json(indent=2))
+        logger.info("\nTender Analysis Result:")
+        logger.info(analysis.model_dump_json(indent=2))
 
         save_json(result, OUTPUT_PATH)
 
-        print(f"\nAnalysis saved to: {OUTPUT_PATH}")
+        logger.info(f"\nAnalysis saved to: {OUTPUT_PATH}")
 
     except FileNotFoundError as error:
-        print(error)
+        logger.info(error)
 
     except Exception as error:
-        print("An error occurred while analyzing the document.")
-        print(f"Details: {error}")
+        logger.info("An error occurred while analyzing the document.")
+        logger.info(f"Details: {error}")
 
 
 if __name__ == "__main__":

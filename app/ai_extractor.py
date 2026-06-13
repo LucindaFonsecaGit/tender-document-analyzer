@@ -1,4 +1,6 @@
 from app.config import settings
+from app.logger import get_logger
+
 import json
 import os
 from pathlib import Path
@@ -11,6 +13,7 @@ from app.models import TenderAnalysis
 
 load_dotenv()
 
+logger = get_logger(__name__)
 
 def load_prompt() -> str:
     return settings.prompt_path.read_text(encoding="utf-8")
@@ -215,7 +218,7 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
     model = settings.llm_model
 
     if demo_mode or not api_key:
-        print("Running in demo mode. No API key was used.")
+        logger.info("Running in demo mode. No API key was used.")
         return get_demo_analysis()
 
     client = OpenAI(
@@ -249,6 +252,6 @@ def analyze_tender_text(document_text: str, demo_mode: bool = False) -> TenderAn
 
     data = _normalise_evidence_fields(data, document_text)
 
-    print(json.dumps(data, indent=2, ensure_ascii=False))
+    logger.info("AI response parsed successfully.")
 
     return TenderAnalysis(**data)
